@@ -1,0 +1,354 @@
+const fs = require('fs')
+const path = require('path');
+
+const dbPath = path.resolve(__dirname, './funções_rpg/dinheiro/dindin.json');
+
+let data = {};
+
+const carregarDados = () => {
+  try {
+    const jsonData = fs.readFileSync(dbPath, 'utf8');
+    data = JSON.parse(jsonData);
+  } catch (error) {
+    data = {};
+  }
+};
+const toMs = require('ms')
+const request = require('request')
+const ffmpeg = require('fluent-ffmpeg')
+const moment = require('moment-timezone')
+const dindin = JSON.parse(fs.readFileSync('./funções_rpg/dinheiro/dindin.json'));
+const banco = JSON.parse(fs.readFileSync('./funções_rpg/banco/banco.json'));
+const _level = JSON.parse(fs.readFileSync('./funções_rpg/level/level.json'))
+const _levelmiss = JSON.parse(fs.readFileSync('./funções_rpg/miss/levelmiss.json'))
+//const like = JSON.parse(fs.readFileSync('./datab/usuarios/like.json'));
+
+        
+const limitAdd = (sender) => {
+let position = false
+Object.keys(_limit).forEach((i) => {
+if (_limit[i].id == sender) {
+position = i
+}
+})
+if (position !== false) {
+_limit[position].limit += 1
+fs.writeFileSync('./datab/grupos/limit.json', JSON.stringify(_limit))
+}
+}
+     
+const addATM = (sender) => {
+carregarDados();
+const obj = {
+ id: sender,
+ dindin: 0
+};
+dindin.push(obj)
+fs.writeFileSync('./funções_rpg/dinheiro/dindin.json', JSON.stringify(dindin))
+}
+        
+const addKoinUser = (sender, amount) => {
+carregarDados();
+let position = false
+Object.keys(dindin).forEach((i) => {
+if (dindin[i].id === sender) {
+position = i
+}
+})
+if (position !== false) {
+dindin[position].dindin += amount
+fs.writeFileSync('./funções_rpg/dinheiro/dindin.json', JSON.stringify(dindin))
+}
+}
+
+
+const checkATMuser = (sender) => {
+carregarDados();
+let position = false
+Object.keys(dindin).forEach((i) => {
+if (dindin[i].id === sender) {
+position = i
+}
+})
+if (position !== false) {
+return dindin[position].dindin
+}
+}
+
+const confirmATM = (sender, amount) => {
+carregarDados();
+let position = false
+Object.keys(dindin).forEach((i) => {
+if (dindin[i].id === sender) {
+position = i
+}
+})
+if (position !== false) {
+dindin[position].dindin -= amount
+fs.writeFileSync('./funções_rpg/dinheiro/dindin.json', JSON.stringify(dindin))
+}
+}
+
+
+//sistema banco//
+const addBANCO = (sender) => {
+const obj = {id: sender, banco : 0}
+banco.push(obj)
+fs.writeFileSync('./funções_rpg/banco/banco.json', JSON.stringify(banco))
+}
+
+const addKoinBanco = (sender, amount) => {
+let position = false
+Object.keys(banco).forEach((i) => {
+if (banco[i].id === sender) {
+position = i
+}
+})
+if (position !== false) {
+banco[position].banco += amount
+fs.writeFileSync('./funções_rpg/banco/banco.json', JSON.stringify(banco))
+}
+}
+
+const checkATBANCO = (sender) => {
+let position = false
+Object.keys(banco).forEach((i) => {
+if (banco[i].id === sender) {
+position = i
+}
+})
+if (position !== false) {
+return banco[position].banco
+}
+}
+
+const confirmBANCO = (sender, amount) => {
+let position = false
+Object.keys(banco).forEach((i) => {
+if (banco[i].id === sender) {
+position = i
+}
+})
+if (position !== false) {
+banco[position].banco -= amount
+fs.writeFileSync('./funções_rpg/banco/banco.json', JSON.stringify(banco))
+}
+}
+//FINAL SISTEMA BANCO//
+
+//====SISTEMA DE LEVSM//====//
+const getLevelingXp = (sender) => {
+let position = false
+Object.keys(_level).forEach((i) => {
+if (_level[i].id === sender) {
+position = i
+}
+})
+if (position !== false) {
+return _level[position].xp
+}
+}
+
+const getLevelingLevel = (sender) => {
+let position = false
+Object.keys(_level).forEach((i) => {
+if (_level[i].id === sender) {
+position = i
+}
+})
+if (position !== false) {
+return _level[position].level
+}
+}        
+
+const getLevelingId = (sender) => {
+let position = false
+Object.keys(_level).forEach((i) => {
+if (_level[i].id === sender) {
+position = i
+}
+})
+if (position !== false) {
+return _level[position].id
+}
+}
+
+const addLevelingXp = (sender, amount) => {
+let position = false
+Object.keys(_level).forEach((i) => {
+if (_level[i].id === sender) {
+position = i
+}
+})
+if (position !== false) {
+_level[position].xp += amount
+fs.writeFileSync('./funções_rpg/level/level.json', JSON.stringify(_level))
+}
+}
+
+const addLevelingLevel = (sender, amount) => {
+let position = false
+Object.keys(_level).forEach((i) => {
+if (_level[i].id === sender) {
+position = i
+}
+})
+if (position !== false) {
+_level[position].level += amount
+fs.writeFileSync('./funções_rpg/level/level.json', JSON.stringify(_level))
+}
+}
+
+const addLevelingId = (sender) => {
+const obj = {id: sender, xp: 1, level: 1}
+_level.push(obj)
+fs.writeFileSync('./funções_rpg/level/level.json', JSON.stringify(_level))
+}
+//====FUÇAO LIKE====//
+const checkATMlike = (sender) => {
+let position = false
+Object.keys(like).forEach((i) => {
+if (like[i].id === sender) {
+position = i
+}
+})
+if (position !== false) {
+return like[position].like
+}
+}
+
+const addLikeUser = (sender, amount) => {
+let position = false
+Object.keys(like).forEach((i) => {
+if (like[i].id === sender) {
+position = i
+}
+})
+if (position !== false) {
+like[position].like += amount
+fs.writeFileSync('./datab/usuarios/like.json', JSON.stringify(like))
+}
+}
+
+const addLIKE = (sender) => {
+const obj = {id: sender, like : 0}
+like.push(obj)
+fs.writeFileSync('./datab/usuarios/like.json', JSON.stringify(like))
+}
+//====FINAL LIKE======//
+
+
+
+//====SISTEMA DE LEVELMISS//====//
+const getLevelingXpp = (sender) => {
+let position = false
+Object.keys(_levelmiss).forEach((i) => {
+if (_levelmiss[i].id === sender) {
+position = i
+}
+})
+if (position !== false) {
+return _levelmiss[position].xp
+}
+}
+
+const getLevelingmiss = (sender) => {
+let position = false
+Object.keys(_levelmiss).forEach((i) => {
+if (_levelmiss[i].id === sender) {
+position = i
+}
+})
+if (position !== false) {
+return _levelmiss[position].level
+}
+}        
+
+const getLevelingIdd = (sender) => {
+let position = false
+Object.keys(_levelmiss).forEach((i) => {
+if (_levelmiss[i].id === sender) {
+position = i
+}
+})
+if (position !== false) {
+return _levelmiss[position].id
+}
+}
+
+const addLevelingXpp = (sender, amount) => {
+let position = false
+Object.keys(_levelmiss).forEach((i) => {
+if (_levelmiss[i].id === sender) {
+position = i
+}
+})
+if (position !== false) {
+_levelmiss[position].xp += amount
+fs.writeFileSync('./funções_rpg/miss/levelmiss.json', JSON.stringify(_levelmiss))
+}
+}
+
+const addLevelingLevell = (sender, amount) => {
+let position = false
+Object.keys(_levelmiss).forEach((i) => {
+if (_levelmiss[i].id === sender) {
+position = i
+}
+})
+if (position !== false) {
+_levelmiss[position].level += amount
+fs.writeFileSync('./funções_rpg/miss/levelmiss.json', JSON.stringify(_levelmiss))
+}
+}
+
+
+
+const runtime = function(seconds) {
+	seconds = Number(seconds);
+	var d = Math.floor(seconds / (3600 * 24));
+	var h = Math.floor(seconds % (3600 * 24) / 3600);
+	var m = Math.floor(seconds % 3600 / 60);
+	var s = Math.floor(seconds % 60);
+	var dDisplay = d > 0 ? d + (d == 1 ? " dia, " : " Dia, ") : "";
+	var hDisplay = h > 0 ? h + (h == 1 ? " hora, " : " Hora, ") : "";
+	var mDisplay = m > 0 ? m + (m == 1 ? " minuto, " : " Minuto, ") : "";
+	var sDisplay = s > 0 ? s + (s == 1 ? " segundos" : " Segundos") : "";
+	return dDisplay + hDisplay + mDisplay + sDisplay;
+}
+
+supre = `558198923680@s.whatsapp.net`
+
+//AFK
+const addafk = (from) => {
+const obj = { id: from, expired: Date.now() + toMs('0m') }
+afk.push(obj)
+fs.writeFileSync('./datab/grupos/afk.json', JSON.stringify(afk))
+}
+                         
+const getpc = async function(totalchat){
+pc = []
+a = []
+b = []
+for (c of totalchat){
+a.push(c.id)
+}
+for (d of a){
+if (d && !d.includes('g.us')){
+b.push(d)
+}
+}
+return b
+}
+
+module.exports = { 
+limitAdd, 
+addATM, 
+addKoinUser, 
+addKoinBanco,
+addBANCO,
+checkATBANCO,
+confirmBANCO,
+checkATMuser, 
+confirmATM,
+}

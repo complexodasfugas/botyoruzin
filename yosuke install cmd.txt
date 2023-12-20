@@ -1,0 +1,20 @@
+Primeio comando:
+
+termux-change-repo
+                 
+termux-setup-storage
+
+pkg upgrade              
+                           
+pkg update
+
+pkg install nodejs
+
+pkg install nodejs-lts
+
+pkg install git
+            
+cd /sdcard/download/yosuke-bot
+        
+sh start.sh
+                 
